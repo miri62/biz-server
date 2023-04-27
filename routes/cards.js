@@ -83,7 +83,7 @@ router.delete("/:cardId", auth, async (req, res) => {
     let card = await Card.findOneAndRemove({ _id: req.params.cardId });
     // let card = await Card.findById(req.params.cardId);
     if (!card) return res.status(404).send("No such card");
-    res.status(200).send(product);
+    res.status(200).send(card);
   } catch (error) {
     res.status(400).send(error);
   }
