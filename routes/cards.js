@@ -8,7 +8,7 @@ const cardSchema = joi.object({
   name: joi.string().required().min(2),
   Description: joi.string().required(),
   Address: joi.string().required(),
-  phone: joi.number().required(),
+  phone: joi.string().required(),
   image: joi.string().required(),
   userId: joi.string(),
 });
@@ -42,6 +42,17 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+router.get("/cards/:_id", auth, async (req, res) => {
+  try {
+    if (!req.payload.isBussines)
+      return res.status(400).send("Access denied. No Buisness-Man permission");
+    let card = await Card.findOne({ _id: req.params._id });
+    if (!card) return res.status(404).send("No such card");
+    res.status(200).send(card);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 router.get("/:userId", auth, async (req, res) => {
   try {
     let card = await Card.find({ userId: req.params.userId });
